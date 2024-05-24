@@ -2,12 +2,16 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   env:{
-    apiUrl: "http://localhost:8081"
+    apiUrl: "http://localhost:8081",
   },
 
+  snapshotOnly: true,
+
+  video: true, 
+  
+
   e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
+    setupNodeEvents(on, config) { 
     },
     baseUrl : "http://localhost:8080",
   },
