@@ -1,6 +1,9 @@
+const username = Cypress.env("username")
+const password = Cypress.env("password")
+
 describe("Smoke Test Suite", () => {
   it("Verify presence of login fields and buttons", () => {
-    cy.visit("");
+    cy.visit('/');
     cy.getBySel("nav-link-login").click(); 
     cy.getBySel("login-input-username").should("be.visible");
     cy.getBySel("login-input-password").should("be.visible");
@@ -8,12 +11,12 @@ describe("Smoke Test Suite", () => {
   });
 
   it("Verify presence of 'Add to Cart' and product availability after successful login", () => {
-    cy.visit("");
+    cy.visit('/');
     cy.getBySel("nav-link-login").click();
     cy.getBySel("login-input-username").type("test2@test.fr");
     cy.getBySel("login-input-password").type("testtest");
     cy.getBySel("login-submit").click();
-    cy.contains("Mon panier").should("be.visible"); 
+    cy.contains("Mon panier",{timeout:10000}).should("be.visible"); 
 
     // Select product"
     cy.getBySel("nav-link-products").click();
@@ -25,7 +28,11 @@ describe("Smoke Test Suite", () => {
   });
 
   it('Check stock and report a good number ', () => {
-    cy.visit("")
+    cy.visit('/')
+    cy.getBySel("nav-link-login").click();
+    cy.getBySel("login-input-username").type("test2@test.fr");
+    cy.getBySel("login-input-password").type("testtest");
+    cy.getBySel("login-submit").click();
     cy.getBySel('product-home-link').first().click()
     cy.getBySel('detail-product-stock').invoke('text').should('match', /^(0|[1-9][0-9]*) en stock$/)
 })

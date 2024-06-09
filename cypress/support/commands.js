@@ -9,7 +9,7 @@ Cypress.Commands.add("getBySel", (selector, ...args) => {
 Cypress.Commands.add('login', () => {
   const username = Cypress.env("username");
   const password = Cypress.env("password");
-  cy.visit("");
+  cy.visit("/login");
   cy.getBySel('login-input-username').type(username);
   cy.getBySel('login-input-password').type(password);
   cy.getBySel('login-submit').click();
@@ -18,6 +18,6 @@ Cypress.Commands.add('login', () => {
   cy.url().should('not.include', '/login'); // Assuming successful login redirects
 });
 
-
+ 
   
 

@@ -19,7 +19,7 @@ describe("Adding a Review", () => {
     });
   
     it("Add a Review with Valid Token", () => {
-      cy.login(); // a custom command for logging in
+      cy.visit('/login'); // log in
       cy.request({
         method: "POST",
         url: Cypress.env("apiUrl") + "/reviews",

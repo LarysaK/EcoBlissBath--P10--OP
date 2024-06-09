@@ -1,6 +1,6 @@
-describe('Test product page', () => { 
-    it('show products exists on homepage and data by products', () => { 
-        cy.visit('/') 
+describe('Tests for product page', () => { 
+    it('Show products exists on homepage', () => { 
+        cy.visit('/'); 
 
         cy.getBySel('product-home').each(() => {
             // Check if essential elements for each product on the homepage exist
