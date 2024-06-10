@@ -32,7 +32,9 @@ npx cypress open
 5. Ouvrez le site depuis la page [localhost:8080](http://localhost:8080)
 6. Lien vers [Swagger](http://localhost:8081/api/doc)
 7. Login
+   
 Identifiant: test2@test.fr
+
 Mot de passe: testtest
 
 
