@@ -19,6 +19,7 @@ Cypress.Commands.add('login', () => {
 });
 
 Cypress.Commands.add('getToken', () => {
+  const apiUrl = Cypress.env("apiUrl");
   return cy.request({
     method: 'POST',
     url: apiUrl + '/',
