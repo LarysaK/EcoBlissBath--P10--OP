@@ -18,19 +18,19 @@ Cypress.Commands.add('login', () => {
    cy.url().should('not.include', '/login'); // Assuming successful login redirects
 });
 
+
+
 Cypress.Commands.add('getToken', () => {
-  const apiUrl = Cypress.env("apiUrl");
-  return cy.request({
+  cy.request({
     method: 'POST',
-    url: apiUrl + '/',
+    url: `${Cypress.env('apiUrl')}/login`, 
     body: {
       username: Cypress.env('username'),
-      password: Cypress.env('password'),
-    },
+      password: Cypress.env('password')
+    }
   }).then((response) => {
-    return response.body.token;
+    return response.body.token; 
   });
 });
- 
   
 

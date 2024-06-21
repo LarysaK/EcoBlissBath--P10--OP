@@ -13,7 +13,7 @@ describe("Panier / Order access without authorization", () => {
   });
 });
 
-// NOT work !!!!!! Internal Server Error 500
+// Test NOK! Internal Server Error 500, to check this when the dev will resolve the problem
 // describe("Panier / Order access without authorization", () => {
 // it('error 403', () => {    
 //   cy.request({

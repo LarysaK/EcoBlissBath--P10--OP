@@ -23,7 +23,7 @@ npm install
 npm start
 ```
 
-4. Installer / Ouvrir Cypress
+4. Installer / Ouvrir [Cypress](https://www.cypress.io/)
 ```bash
 npm install cypress --save-dev
 npx cypress open
@@ -31,17 +31,13 @@ npx cypress open
 
 5. Ouvrez le site depuis la page [localhost:8080](http://localhost:8080)
 6. Lien vers [Swagger](http://localhost:8081/api/doc)
-7. Login
-   
-Identifiant: test2@test.fr
-
-Mot de passe: testtest
+7. Login : Identifiant: test2@test.fr / Mot de passe: testtest
 
 
 ## Tests
 Smoke tests :
 
-1.Vérifiez la présence des champs et boutons de connexion
+1. Vérifiez la présence des champs et boutons de connexion
 2. Vérifiez la présence des boutons d’ajout au panier quand vous êtes connecté
 3. Vérifiez la présence du champ de disponibilité du produit
 
@@ -71,8 +67,11 @@ Test fonction :
 1. Connexion
 2. Pannier (Ajout de prdouit, verififcation des stocks, limite)
 
-## Lien vers CYPRESS documentation
-[Cypress](https://www.cypress.io/)
+## Versions
+-version 1.1.1 Cypress / Tests automatisés
+
+## Auteur
+Larysa Karahieorhii
 
 
 
