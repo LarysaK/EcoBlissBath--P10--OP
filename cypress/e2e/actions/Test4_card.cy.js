@@ -68,7 +68,7 @@ describe("Cart tests", () => {
 	})
 
 	it("Add products available in stock to cart and check stock", () => {
-		cy.visit("http://localhost:8080/#/products/5")
+		cy.visit("http://localhost:8080/#/products/4")
 
 		cy.getBySel("detail-product-stock")
 			.invoke("text")
@@ -115,7 +115,7 @@ describe("Cart tests", () => {
 		})
 	})
 
-	it("check limit with positive quantity greater than 20", () => {
+	it("Check limit with positive quantity greater than 20", () => {
 		cy.visit("http://localhost:8080/#/products")
 
 		cy.getBySel("product-link").then(link => {
@@ -135,7 +135,7 @@ describe("Cart tests", () => {
 		})
 	})
 
-	it("should add a product to the cart and show up in the API", () => {
+	it("Should add a product to the cart and show up in the API", () => {
 		let Productid;
 	
 		// Navigate to the first product detail page
@@ -150,7 +150,7 @@ describe("Cart tests", () => {
 			cy.log(`Product ID: ${Productid}`);
 	
 			// Add the product to the cart
-			cy.wait(2000);  // Ensure the page has fully loaded
+			cy.wait(2000);  // Check the page has fully loaded
 			cy.getBySel("detail-product-add").click();
 	
 			// Verify the product is added to the cart via API
@@ -178,10 +178,9 @@ describe("Cart tests", () => {
 	
 		cy.visit("/cart");
 	
-		// Ensure the cart contains items before attempting to delete
+		// Check the cart contains items before attempting to delete
 		cy.get('body').then($body => {
 			if ($body.find("[data-cy=cart-line-delete]").length > 0) {
-				// Ensure the cart line delete buttons are visible before clicking
 				cy.getBySel("cart-line-delete", { timeout: 20000 })
 				  .should('be.visible')
 				  .click({ multiple: true });
@@ -194,7 +193,7 @@ describe("Cart tests", () => {
 	
 	
 
-	it("change product quantity", () => {
+	it("Change product quantity", () => {
 		let idCart;
 	
 		// Retrieve the cart ID first
@@ -208,9 +207,9 @@ describe("Cart tests", () => {
 			}).then(response => {
 				cy.log('Orders response:', response.body);
 	
-				// Ensure the response has the expected structure and data
+				// Check the response has the expected structure and data
 				if (response.body && response.body.length > 0) {
-					idCart = response.body[0].id; // Adjust this according to your API response structure
+					idCart = response.body[0].id; // 
 					cy.log(`Cart ID: ${idCart}`);
 	
 					// Proceed to change the quantity now that we have a valid cart ID
