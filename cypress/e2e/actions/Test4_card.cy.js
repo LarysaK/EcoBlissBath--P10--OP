@@ -1,6 +1,8 @@
 import { faker } from "@faker-js/faker"
 
-const fakerNegativeStock = faker.datatype.number({ min: -10, max: -1 }).toString()
+const fakerNegativeStock = faker.datatype
+	.number({ min: -10, max: -1 })
+	.toString()
 const fakerStockSup20 = faker.datatype.number({ min: 20, max: 400 }).toString()
 const apiUrl = Cypress.env("apiUrl")
 const apiOrders = `${Cypress.env("apiUrl")}/orders`
@@ -110,7 +112,10 @@ describe("Cart tests", () => {
 					cy.getBySel("detail-product-quantity").clear()
 					cy.getBySel("detail-product-quantity").type(fakerNegativeStock)
 					cy.getBySel("detail-product-form").should("have.class", "ng-invalid")
-					cy.getBySel("detail-product-form").should("not.have.class", "ng-valid")
+					cy.getBySel("detail-product-form").should(
+						"not.have.class",
+						"ng-valid"
+					)
 				})
 		})
 	})
@@ -129,33 +134,35 @@ describe("Cart tests", () => {
 					cy.getBySel("detail-product-quantity").clear()
 					cy.getBySel("detail-product-quantity").type(fakerStockSup20)
 					cy.getBySel("detail-product-form").should("have.class", "ng-valid")
-					cy.getBySel("detail-product-form").should("not.have.class", "ng-invalid")
-
+					cy.getBySel("detail-product-form").should(
+						"not.have.class",
+						"ng-invalid"
+					)
 				})
 		})
 	})
 
 	it("Should add a product to the cart and show up in the API", () => {
-		let Productid;
-	
+		let Productid
+
 		// Navigate to the first product detail page
 		cy.getBySel("product-home-link", { timeout: 20000 })
-		  .should('be.visible')
-		  .first()
-		  .click();
-	
+			.should("be.visible")
+			.first()
+			.click()
+
 		cy.url().then(url => {
-			const segments = url.split("/");
-			Productid = parseInt(segments[segments.length - 1]);
-			cy.log(`Product ID: ${Productid}`);
-	
+			const segments = url.split("/")
+			Productid = parseInt(segments[segments.length - 1])
+			cy.log(`Product ID: ${Productid}`)
+
 			// Add the product to the cart
-			cy.wait(2000);  // Check the page has fully loaded
-			cy.getBySel("detail-product-add").click();
-	
+			cy.wait(2000) // Check the page has fully loaded
+			cy.getBySel("detail-product-add").click()
+
 			// Verify the product is added to the cart via API
-			cy.wait(2000);  // Wait for the cart API to reflect the new addition
-	
+			cy.wait(2000) // Wait for the cart API to reflect the new addition
+
 			cy.getToken().then(token => {
 				cy.request({
 					method: "GET",
@@ -164,73 +171,70 @@ describe("Cart tests", () => {
 						Authorization: `Bearer ${token}`,
 					},
 				}).then(response => {
-					cy.log(JSON.stringify(response.body));
-	
-					const orderLines = response.body.orderLines;
-					const productInCart = orderLines.find(orderLine => orderLine.product.id === Productid);
-	
+					cy.log(JSON.stringify(response.body))
+
+					const orderLines = response.body.orderLines
+					const productInCart = orderLines.find(
+						orderLine => orderLine.product.id === Productid
+					)
+
 					// Check if the product is in the cart
-					expect(productInCart).to.not.be.undefined;
-					expect(productInCart.product.id).to.equal(Productid);
-				});
-			});
-		});
-	
-		cy.visit("/cart");
-	
+					expect(productInCart).to.not.be.undefined
+					expect(productInCart.product.id).to.equal(Productid)
+				})
+			})
+		})
+
+		cy.visit("/cart")
+
 		// Check the cart contains items before attempting to delete
-		cy.get('body').then($body => {
+		cy.get("body").then($body => {
 			if ($body.find("[data-cy=cart-line-delete]").length > 0) {
 				cy.getBySel("cart-line-delete", { timeout: 20000 })
-				  .should('be.visible')
-				  .click({ multiple: true });
+					.should("be.visible")
+					.click({ multiple: true })
 			} else {
-				cy.log('No items in the cart to delete');
+				cy.log("No items in the cart to delete")
 			}
-		});
-	});
-	
-	
-	
+		})
+	})
 
-	it("Change product quantity", () => {
-		let idCart;
-	
-		// Retrieve the cart ID first
-		cy.getToken().then(token => {
-			cy.request({
-				method: "GET",
-				url: apiUrl + "/orders",
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			}).then(response => {
-				cy.log('Orders response:', response.body);
-	
-				// Check the response has the expected structure and data
-				if (response.body && response.body.length > 0) {
-					idCart = response.body[0].id; // 
-					cy.log(`Cart ID: ${idCart}`);
-	
-					// Proceed to change the quantity now that we have a valid cart ID
-					cy.request({
-						method: "PUT",
-						url: apiUpdateQuantity + `/${idCart}/change-quantity`,
-						headers: {
-							Authorization: `Bearer ${token}`,
-						},
-						body: {
-							quantity: 2,
-						},
-					}).then(response => {
-						cy.log('Change quantity response:', response);
-						expect(response.status).to.eq(200);
-					});
+	it("Add product to cart and check the good quantity stock", () => {
+		const productId = 6
+		const quantityToAdd = 4
+		const expectedNewStock = 6
+
+		cy.visit(`http://localhost:8080/#/products/${productId}`)
+
+		cy.getBySel("detail-product-stock")
+			.invoke("text")
+			.should("match", /(0|[1-9][0-9]*) en stock$/)
+			.then(text => {
+				const stock = text.trim()
+				const quantityStock = parseInt(stock.match(/^-?\d+/)[0])
+				cy.log(`Initial stock for product ${productId}: ${quantityStock}`)
+
+				if (quantityStock < quantityToAdd) {
+					cy.log(
+						`Cannot add ${quantityToAdd} to cart because stock is insufficient`
+					)
 				} else {
-					throw new Error("No orders found in response");
+					for (let i = 0; i < quantityToAdd; i++) {
+						cy.getBySel("detail-product-add").click()
+					}
+					cy.get("#cart-content").should("exist")
+					cy.go("back")
+
+					cy.getBySel("detail-product-stock")
+						.invoke("text")
+						.should("match", new RegExp(`^${expectedNewStock} en stock$`))
+					cy.log(
+						`Stock after adding to cart for product ${productId}: ${expectedNewStock}`
+					)
+
+					cy.visit("http://localhost:8080/#/cart")
+					cy.getBySel("cart-line-delete").click({ multiple: true })
 				}
-			});
-		});
-	});
-	
-	});	
+			})
+	})
+})

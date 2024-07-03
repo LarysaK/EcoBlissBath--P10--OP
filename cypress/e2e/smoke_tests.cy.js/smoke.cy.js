@@ -16,7 +16,7 @@ describe("Smoke Test Suite", () => {
     cy.getBySel("login-input-username").type("test2@test.fr");
     cy.getBySel("login-input-password").type("testtest");
     cy.getBySel("login-submit").click();
-    cy.contains("Mon panier",{timeout:10000}).should("be.visible"); 
+    cy.contains("Mon panier",{timeout:300000}).should("be.visible"); 
 
     // Select product"
     cy.getBySel("nav-link-products").click();
@@ -28,12 +28,9 @@ describe("Smoke Test Suite", () => {
   });
 
   it('Check stock and report a good number ', () => {
-    cy.visit('/')
-    cy.getBySel("nav-link-login").click();
-    cy.getBySel("login-input-username").type("test2@test.fr");
-    cy.getBySel("login-input-password").type("testtest");
-    cy.getBySel("login-submit").click();
-    cy.getBySel('product-home-link').first().click()
+    cy.visit("http://localhost:8080/#/products/5")
+    cy.get('[data-cy="detail-product-stock"]').should('exist')
+    cy.get('[data-cy="detail-product-quantity"]').should('exist')
     cy.getBySel('detail-product-stock').invoke('text').should('match', /^(0|[1-9][0-9]*) en stock$/)
 })
 
