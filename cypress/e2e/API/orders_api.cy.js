@@ -14,25 +14,25 @@ describe("Panier / Order access without authorization", () => {
 });
 
 // Test NOK! Internal Server Error 500 in swagger, to check this when the dev will resolve the problem
-// describe("Panier / Order access without authorization", () => {
-// it('error 403', () => {    
-//   cy.request({
-//       method: "POST",
-//       url: `${Cypress.env("apiUrl")}/orders`,
-//       headers: {
-//           Authorization : "",
-//       },
-//       body: {
-//           "product": 3,
-//           "quantity": 3,
-//       },
-//       failOnStatusCode: true 
-//     }).then((response) => {
-//       expect(response.status).to.eq(403)
-//       cy.log(JSON.stringify(response.body))
-//     });
-// });
-// });
+describe("Panier / Order access without authorization", () => {
+it('error 403', () => {    
+  cy.request({
+      method: "POST",
+      url: `${Cypress.env("apiUrl")}/orders`,
+      headers: {
+          Authorization : "",
+      },
+      body: {
+          "product": 3,
+          "quantity": 3,
+      },
+      failOnStatusCode: true 
+    }).then((response) => {
+      expect(response.status).to.eq(403)
+      cy.log(JSON.stringify(response.body))
+    });
+});
+});
 
 
 // Adding an Available Product to the Cart
